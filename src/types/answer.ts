@@ -1,4 +1,4 @@
 type Answer = {
-  question: number;
+  question: string;
   expectedAnswer: string;
 };
