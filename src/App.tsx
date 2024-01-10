@@ -23,9 +23,11 @@ function App() {
   const [cookies, setCookie] = useCookies(
     RobloxAnswer.map((el) => el.question)
   );
+  const point = 100;
 
   const [answer1, setAnswer1] = useState("");
   const [answer2, setAnser2] = useState("");
+  const [score, setScore] = useState(0);
   const [attempted, setAttempted] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [question, setQuestion] = useState(cookies.current);
@@ -168,8 +170,8 @@ function App() {
                   (answer1 !==
                     RobloxAnswer.find((item) => item.question == question)
                       ?.firstAnswer ||
-                    countdown !== 0) &&
-                  answer2 === "") ||
+                    countdown != 0) &&
+                  answer2 == "") ||
                 cookies[question]
               }
               variant="contained"
