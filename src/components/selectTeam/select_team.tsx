@@ -11,16 +11,21 @@ import {
   Grid,
   Button,
 } from "@mui/material";
-import server from "../utils/server";
-import { Group, GroupPlayerResponse } from "../types/team";
+import server from "../../utils/server";
+import { Group, GroupPlayerResponse } from "../../types/team";
 import { atom, useAtom } from "jotai";
 import Swal from "sweetalert2";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 export const selectedTeam = atom<Group[]>([]);
 
 const SelectTeam = () => {
   const [groupPlayer, setGroupPlayer] = useState<Group[]>([]);
   const [team, setTeam] = useAtom(selectedTeam);
   const [error, setError] = useState("");
+
+  const [cookies, setCookie] = useCookies(["select-team"]);
+  const navigate = useNavigate();
 
   const getGroupPlayer = async () => {
     await server.get<GroupPlayerResponse>("/operate/player").then((res) => {
@@ -29,7 +34,6 @@ const SelectTeam = () => {
       }
     });
   };
-  console.log(team);
 
   const handleClickCard = (data: Group) => {
     setTeam((prevTeam) =>
@@ -55,11 +59,17 @@ const SelectTeam = () => {
         html: `<b>Your Teams<b/> : ${team.map((a) => {
           return `<span style="color: red"> ${a.name} </span> `;
         })}`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setCookie("select", team);
+          navigate("/question");
+        }
       });
     } else {
       setError("Please add team before submit");
     }
   };
+  console.log(team.map((el) => el.number));
 
   useEffect(() => {
     getGroupPlayer();
@@ -74,6 +84,14 @@ const SelectTeam = () => {
           height="100%"
           alignItems="center"
         >
+          <Typography
+            color={"black"}
+            fontWeight={"bold"}
+            fontSize={"5rem"}
+            marginBottom={"2rem"}
+          >
+            Select Your Team
+          </Typography>
           <Grid container justifyContent="center" spacing={2}>
             {groupPlayer?.map((value) => (
               <Grid key={value.number} item>

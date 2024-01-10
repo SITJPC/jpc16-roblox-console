@@ -10,16 +10,20 @@ import {
   SelectChangeEvent,
   FormControl,
   InputLabel,
+  Avatar,
 } from "@mui/material";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import StarIcon from "@mui/icons-material/Star";
 import LockIcon from "@mui/icons-material/Lock";
-import { RobloxAnswer } from "./data/answer";
+import { RobloxAnswer } from "../../data/answer";
 import { useCookies } from "react-cookie";
+import { useAtomValue } from "jotai";
+import { selectedTeam } from "../selectTeam/select_team";
 
-function App() {
+function Questions() {
   const [cookies, setCookie] = useCookies(
     RobloxAnswer.map((el) => el.question)
   );
@@ -31,6 +35,7 @@ function App() {
   const [attempted, setAttempted] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [question, setQuestion] = useState(cookies.current);
+  const selectTeam = useAtomValue(selectedTeam);
 
   const handleChange = (event: SelectChangeEvent) => {
     setQuestion(event.target.value as string);
@@ -48,6 +53,7 @@ function App() {
           icon: "success",
         });
         setCookie(question, true);
+        setCookie("score", cookies.score + point);
         setAnswer1("");
         setAnser2("");
       } else {
@@ -87,6 +93,9 @@ function App() {
   };
 
   useEffect(() => {
+    if (cookies.score == undefined) {
+      setCookie("score", 0);
+    }
     RobloxAnswer.map((el) => {
       if (cookies[el.question] == undefined) {
         setCookie(el.question, false);
@@ -120,6 +129,52 @@ function App() {
 
   return (
     <Box width={"100vw"} height={"100vh"}>
+      <Stack
+        position={"absolute"}
+        direction={"row"}
+        right={"10rem"}
+        top="5rem"
+        alignItems={"center"}
+      >
+        <Stack direction={"row"} marginRight={"2rem"}>
+          <StarIcon
+            sx={{
+              color: "#FFBE00",
+              fontSize: "4.5rem",
+              position: "absolute",
+              left: "-1.5rem",
+              top: "-1rem",
+            }}
+          />
+          <Box
+            sx={{
+              backgroundColor: "#3F4D4F",
+              padding: "0.5rem 3rem",
+              borderRadius: "2rem",
+            }}
+          >
+            <Typography color={"white"}>
+              Score:{" "}
+              <span style={{ color: "#FFBE00", fontWeight: "bold" }}>
+                {cookies.score}
+              </span>
+            </Typography>
+          </Box>
+        </Stack>
+        {cookies.select?.map((el) => {
+          return (
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              spacing={2}
+              marginRight={"1rem"}
+            >
+              <Avatar alt={el.name} src="test.png" key={el.number} />
+              <Typography color={"black"}>{el.name}</Typography>
+            </Stack>
+          );
+        })}
+      </Stack>
       <Container maxWidth="lg" sx={{ height: "100%" }}>
         <Stack justifyContent={"center"} width={"100%"} height={"100%"}>
           <Stack direction={"row"} alignItems={"center"}>
@@ -217,4 +272,4 @@ function App() {
   );
 }
 
-export default App;
+export default Questions;

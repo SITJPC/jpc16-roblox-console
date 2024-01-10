@@ -20,6 +20,7 @@
     "react": "^18.2.0",
     "react-cookie": "^7.0.1",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
     "rsuite": "^5.49.0",
     "sweetalert2": "^11.10.2"
   },
