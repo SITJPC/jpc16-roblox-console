@@ -1,4 +1,5 @@
 type Answer = {
   question: string;
-  expectedAnswer: string;
+  firstAnswer: string;
+  secondAnswer: string;
 };

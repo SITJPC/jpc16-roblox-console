@@ -20,16 +20,15 @@ import { RobloxAnswer } from "./data/answer";
 import { useCookies } from "react-cookie";
 
 function App() {
-  const [answer, setAnswer] = useState("");
-  const [attempted, setAttempted] = useState(false);
-  const [countdown, setCountdown] = useState(10);
-  const [question, setQuestion] = useState("1");
-  const [value, setValue] = useState("");
-  const [correct, setCorrect] = useState(false);
-
   const [cookies, setCookie] = useCookies(
     RobloxAnswer.map((el) => el.question)
   );
+
+  const [answer, setAnswer] = useState("");
+  const [attempted, setAttempted] = useState(false);
+  const [countdown, setCountdown] = useState(10);
+  const [question, setQuestion] = useState(cookies.current);
+  const [value, setValue] = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setQuestion(event.target.value as string);
@@ -37,13 +36,15 @@ function App() {
 
   const handleUnlock = async () => {
     if (value != "") {
-      if (value == "bbb") {
+      if (
+        value ==
+        RobloxAnswer.find((item) => item.question === question)?.secondAnswer
+      ) {
         Swal.fire({
           title: "Answer Correct",
           icon: "success",
         });
-        setCorrect(true);
-        setCookie("1", true);
+        setCookie(question, true);
       } else {
         Swal.fire({
           title: "Wrong Correct",
@@ -66,7 +67,10 @@ function App() {
           }
         },
       });
-      if (text == "ddd") {
+      if (
+        text ==
+        RobloxAnswer.find((item) => item.question === question)?.firstAnswer
+      ) {
         Swal.fire({
           title: "Answer Correct",
           icon: "success",
@@ -83,9 +87,8 @@ function App() {
     });
   }, []);
 
-  console.log(cookies[1]);
-
   useEffect(() => {
+    setCookie("current", question);
     let intervalId: any;
 
     if (answer !== "ddd" && attempted && countdown > 0) {
@@ -100,7 +103,7 @@ function App() {
     return () => {
       clearInterval(intervalId);
     };
-  }, [answer, attempted, countdown]);
+  }, [answer, attempted, countdown, question]);
 
   return (
     <Box width={"100vw"} height={"100vh"}>

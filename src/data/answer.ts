@@ -1,22 +1,27 @@
 export const RobloxAnswer: Answer[] = [
   {
     question: "1",
-    expectedAnswer: "ddd",
+    firstAnswer: "ddd",
+    secondAnswer: "bbb",
   },
   {
     question: "2",
-    expectedAnswer: "eee",
+    firstAnswer: "eee",
+    secondAnswer: "bbb",
   },
   {
     question: "3",
-    expectedAnswer: "drrrdd",
+    firstAnswer: "drrrdd",
+    secondAnswer: "bbb",
   },
   {
     question: "4",
-    expectedAnswer: "ggg",
+    firstAnswer: "ggg",
+    secondAnswer: "bbb",
   },
   {
     question: "5",
-    expectedAnswer: "ddqqqd",
+    firstAnswer: "ddqqqd",
+    secondAnswer: "bbb",
   },
 ];
