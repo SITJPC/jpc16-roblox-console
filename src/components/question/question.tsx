@@ -42,6 +42,11 @@ function Questions() {
   };
   console.log(attempted);
 
+  const allCookiesTrue = RobloxAnswer.map(
+    (el) => cookies[el.question] === true
+  ).every(Boolean);
+  console.log(allCookiesTrue);
+
   const handleUnlock = async () => {
     if (answer2 != "") {
       if (
@@ -56,6 +61,9 @@ function Questions() {
         setCookie("score", cookies.score + point);
         setAnswer1("");
         setAnser2("");
+        if (allCookiesTrue) {
+          
+        }
       } else {
         Swal.fire({
           title: "Wrong Correct",
