@@ -24,27 +24,30 @@ function App() {
     RobloxAnswer.map((el) => el.question)
   );
 
-  const [answer, setAnswer] = useState("");
+  const [answer1, setAnswer1] = useState("");
+  const [answer2, setAnser2] = useState("");
   const [attempted, setAttempted] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [question, setQuestion] = useState(cookies.current);
-  const [value, setValue] = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setQuestion(event.target.value as string);
   };
+  console.log(attempted);
 
   const handleUnlock = async () => {
-    if (value != "") {
+    if (answer2 != "") {
       if (
-        value ==
-        RobloxAnswer.find((item) => item.question === question)?.secondAnswer
+        answer2 ==
+        RobloxAnswer.find((item) => item.question == question)?.secondAnswer
       ) {
         Swal.fire({
           title: "Answer Correct",
           icon: "success",
         });
         setCookie(question, true);
+        setAnswer1("");
+        setAnser2("");
       } else {
         Swal.fire({
           title: "Wrong Correct",
@@ -62,15 +65,17 @@ function App() {
           if (!value) {
             return "You need to fill the answer";
           } else {
-            setAnswer(value);
+            console.log("set answer1 ja");
+            setAnswer1(value);
             setAttempted(true);
           }
         },
       });
       if (
         text ==
-        RobloxAnswer.find((item) => item.question === question)?.firstAnswer
+        RobloxAnswer.find((item) => item.question == question)?.firstAnswer
       ) {
+        console.log("correct!");
         Swal.fire({
           title: "Answer Correct",
           icon: "success",
@@ -91,19 +96,25 @@ function App() {
     setCookie("current", question);
     let intervalId: any;
 
-    if (answer !== "ddd" && attempted && countdown > 0) {
+    if (
+      answer1 !==
+        RobloxAnswer.find((item) => item.question == question)?.firstAnswer &&
+      attempted &&
+      countdown > 0
+    ) {
       intervalId = setInterval(() => {
         setCountdown((prevCountdown) => prevCountdown - 1);
       }, 1000);
     }
     if (countdown == 0) {
       setAttempted(false);
+      setCountdown(10);
     }
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [answer, attempted, countdown, question]);
+  }, [answer1, attempted, countdown, question]);
 
   return (
     <Box width={"100vw"} height={"100vh"}>
@@ -114,6 +125,7 @@ function App() {
               fontWeight={"bold"}
               fontSize={"5rem"}
               marginBottom={"1rem"}
+              color={"black"}
             >
               {`Question ${question}`}
             </Typography>
@@ -141,30 +153,52 @@ function App() {
             <TextField
               fullWidth
               label="answer"
-              disabled={answer != "ddd" || cookies[question]}
+              disabled={
+                answer1 !=
+                  RobloxAnswer.find((item) => item.question == question)
+                    ?.firstAnswer || cookies[question]
+              }
               onChange={(el) => {
-                setValue(el.target.value);
+                setAnser2(el.target.value);
               }}
             />
             <Button
               disabled={
                 (attempted &&
-                  (answer !== "ddd" || countdown !== 0) &&
-                  value === "") ||
+                  (answer1 !==
+                    RobloxAnswer.find((item) => item.question == question)
+                      ?.firstAnswer ||
+                    countdown !== 0) &&
+                  answer2 === "") ||
                 cookies[question]
               }
               variant="contained"
-              startIcon={answer == "ddd" ? <LockOpenIcon /> : <LockIcon />}
+              startIcon={
+                answer1 ==
+                RobloxAnswer.find((item) => item.question == question)
+                  ?.firstAnswer ? (
+                  <LockOpenIcon />
+                ) : (
+                  <LockIcon />
+                )
+              }
               sx={{
                 paddingX: "3rem",
-                backgroundColor: answer == "ddd" ? "green" : "blue",
+                backgroundColor:
+                  answer1 ==
+                  RobloxAnswer.find((item) => item.question == question)
+                    ?.firstAnswer
+                    ? "green"
+                    : "blue",
               }}
               onClick={handleUnlock}
             >
-              {answer !== ""
-                ? answer == "ddd"
+              {answer1 !== ""
+                ? answer1 ==
+                  RobloxAnswer.find((item) => item.question == question)
+                    ?.firstAnswer
                   ? "Submit"
-                  : countdown > 0
+                  : attempted
                   ? `${countdown}s`
                   : "Unlock"
                 : "Unlock"}

@@ -1,3 +1,7 @@
+:root {
+  background-color: white;
+}
+
 .shine-cursor-container {
   pointer-events: none; /* To prevent the cursor container from capturing mouse events */
   z-index: 0;
