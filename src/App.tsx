@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import { RobloxAnswer } from "./data/answer";
+import { useCookies } from "react-cookie";
 
 function App() {
   const [answer, setAnswer] = useState("");
@@ -25,6 +26,10 @@ function App() {
   const [question, setQuestion] = useState("1");
   const [value, setValue] = useState("");
   const [correct, setCorrect] = useState(false);
+
+  const [cookies, setCookie] = useCookies(
+    RobloxAnswer.map((el) => el.question)
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
     setQuestion(event.target.value as string);
@@ -38,6 +43,7 @@ function App() {
           icon: "success",
         });
         setCorrect(true);
+        setCookie("1", true);
       } else {
         Swal.fire({
           title: "Wrong Correct",
@@ -68,6 +74,16 @@ function App() {
       }
     }
   };
+
+  useEffect(() => {
+    RobloxAnswer.map((el) => {
+      if (cookies[el.question] == undefined) {
+        setCookie(el.question, false);
+      }
+    });
+  }, []);
+
+  console.log(cookies[1]);
 
   useEffect(() => {
     let intervalId: any;
@@ -122,16 +138,17 @@ function App() {
             <TextField
               fullWidth
               label="answer"
-              disabled={answer != "ddd" || correct}
+              disabled={answer != "ddd" || cookies[question]}
               onChange={(el) => {
                 setValue(el.target.value);
               }}
             />
             <Button
               disabled={
-                attempted &&
-                (answer !== "ddd" || countdown !== 0) &&
-                value === "" || correct
+                (attempted &&
+                  (answer !== "ddd" || countdown !== 0) &&
+                  value === "") ||
+                cookies[question]
               }
               variant="contained"
               startIcon={answer == "ddd" ? <LockOpenIcon /> : <LockIcon />}
@@ -149,7 +166,7 @@ function App() {
                   : "Unlock"
                 : "Unlock"}
             </Button>
-            {correct ? (
+            {cookies[question] ? (
               <CheckCircleIcon sx={{ color: "green", fontSize: "3rem" }} />
             ) : (
               ""
