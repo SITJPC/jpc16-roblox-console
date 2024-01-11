@@ -44,6 +44,32 @@ function Questions() {
     setQuestion(event.target.value as string);
   };
 
+  const handleSubmitScore = () => {
+    console.log(cookies.select);
+    cookies.select.map(async (el: Group) => {
+      await server
+        .post("/operate/score/player", {
+          groupNo: el.number,
+          nickname: "Pooh",
+          score: cookies.score,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            enqueueSnackbar(`Update score for ${el.name} successfully`, {
+              variant: "success",
+            });
+            console.log("Update score successfully");
+          }
+        })
+        .catch((error) => {
+          enqueueSnackbar(`Error updating score for ${el.name} `, {
+            variant: "error",
+          });
+          console.error("Error updating score:", error);
+        });
+    });
+  };
+
   const handleUnlock = async () => {
     if (answer2 != "") {
       if (
@@ -54,38 +80,6 @@ function Questions() {
           title: "Answer Correct",
           icon: "success",
         });
-        // console.log(cookies);
-        let result = cookies;
-        result[question] = true;
-        console.log(result);
-        const allCookiesTrue = RobloxAnswer.map(
-          (el) => result[el.question] == true
-        ).every(Boolean);
-        if (allCookiesTrue) {
-          result.select.map(async (el: Group) => {
-            await server
-              .post("/operate/score/player", {
-                groupNo: el.number,
-                nickname: "Gim",
-                score: cookies.score,
-              })
-              .then((res) => {
-                if (res.status === 200) {
-                  enqueueSnackbar(`Update score for ${el.name} successfully`, {
-                    variant: "success",
-                  });
-                  console.log("Update score successfully");
-                }
-              })
-              .catch((error) => {
-                enqueueSnackbar(`Error updating score for ${el.name} `, {
-                  variant: "error",
-                });
-                console.error("Error updating score:", error);
-              });
-          });
-        }
-
         setCookie(question, true);
         setCookie("score", cookies.score + point);
         setAnswer1("");
@@ -195,7 +189,7 @@ function Questions() {
             </Typography>
           </Box>
         </Stack>
-        {cookies.select?.map((el) => {
+        {cookies.select?.map((el: Group) => {
           return (
             <Stack
               direction={"row"}
@@ -208,6 +202,10 @@ function Questions() {
             </Stack>
           );
         })}
+
+        <Button variant="contained" onClick={handleSubmitScore}>
+          <Typography color={"white"}>Submit Score</Typography>
+        </Button>
       </Stack>
       <Container maxWidth="lg" sx={{ height: "100%" }}>
         <Stack justifyContent={"center"} width={"100%"} height={"100%"}>
