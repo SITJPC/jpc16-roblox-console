@@ -70,6 +70,47 @@ const SelectTeam = () => {
     }
   };
   console.log(team.map((el) => el.number));
+  function stringToColor(string: string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+
+  function stringAvatar(name: string) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+        height: "17rem",
+      },
+      children: (
+        <Stack
+          height={"100%"}
+          direction={"row"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography fontSize={"5rem"} fontWeight={"bold"}>
+            {name.split(" ")[0][0]}
+            {name.split(" ")[1][0]}
+          </Typography>
+        </Stack>
+      ),
+    };
+  }
 
   useEffect(() => {
     getGroupPlayer();
@@ -100,15 +141,14 @@ const SelectTeam = () => {
                   sx={{
                     width: 345,
                     height: 360,
-                    border: team.includes(value) ? "4px solid green" : "",
+                    border: team.includes(value) ? "4px solid darkblue" : "",
                   }}
                 >
                   <CardActionArea onClick={() => handleClickCard(value)}>
                     <CardMedia
-                      component="img"
-                      height="270"
-                      image="test.png"
-                      alt="green iguana"
+                      component="text"
+                      height="970"
+                      {...stringAvatar(value.name)}
                     />
                     <CardContent>
                       <Stack alignItems="center">
