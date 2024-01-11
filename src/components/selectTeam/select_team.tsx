@@ -134,43 +134,50 @@ const SelectTeam = () => {
           >
             Select Your Team
           </Typography>
-          <Grid container justifyContent="center" spacing={2}>
-            {groupPlayer?.map((value) => (
-              <Grid key={value.number} item>
-                <Card
-                  sx={{
-                    width: 345,
-                    height: 360,
-                    border: team.includes(value) ? "4px solid darkblue" : "",
-                  }}
-                >
-                  <CardActionArea onClick={() => handleClickCard(value)}>
-                    <CardMedia
-                      component="text"
-                      height="970"
-                      {...stringAvatar(value.name)}
-                    />
-                    <CardContent>
-                      <Stack alignItems="center">
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="div"
-                          fontWeight="bold"
-                          textAlign="center"
-                        >
-                          {value.name}
-                        </Typography>
-                        <Typography color="blue" variant="caption">
-                          JPC16
-                        </Typography>
-                      </Stack>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+          <Box
+            sx={{
+              overflowY: groupPlayer.length > 6 ? "auto" : "hidden",
+              maxHeight: groupPlayer.length > 6 ? "80vh" : "inherit",
+            }}
+          >
+            <Grid container justifyContent="center" spacing={2}>
+              {groupPlayer?.map((value) => (
+                <Grid key={value.number} item>
+                  <Card
+                    sx={{
+                      width: 345,
+                      height: 360,
+                      border: team.includes(value) ? "4px solid darkblue" : "",
+                    }}
+                  >
+                    <CardActionArea onClick={() => handleClickCard(value)}>
+                      <CardMedia
+                        component="text"
+                        height="970"
+                        {...stringAvatar(value.name)}
+                      />
+                      <CardContent>
+                        <Stack alignItems="center">
+                          <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="div"
+                            fontWeight="bold"
+                            textAlign="center"
+                          >
+                            {value.name}
+                          </Typography>
+                          <Typography color="blue" variant="caption">
+                            JPC16
+                          </Typography>
+                        </Stack>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
           <Box
             onClick={SubmitTeam}
             sx={{
