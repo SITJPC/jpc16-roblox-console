@@ -24,7 +24,7 @@ const SelectTeam = () => {
   const [team, setTeam] = useAtom(selectedTeam);
   const [error, setError] = useState("");
 
-  const [cookies, setCookie] = useCookies(["select-team"]);
+  const [cookies, setCookie] = useCookies(["select", "current"]);
   const navigate = useNavigate();
 
   const getGroupPlayer = async () => {
@@ -73,6 +73,7 @@ const SelectTeam = () => {
 
   useEffect(() => {
     getGroupPlayer();
+    setCookie("current", 1);
   }, []);
 
   return (

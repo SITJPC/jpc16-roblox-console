@@ -23,7 +23,8 @@ import { useCookies } from "react-cookie";
 import { useAtomValue } from "jotai";
 import { selectedTeam } from "../selectTeam/select_team";
 import server from "../../utils/server";
-import { SnackbarProvider, VariantType, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
+import { Group } from "../../types/team";
 
 function Questions() {
   const [cookies, setCookie] = useCookies(
@@ -36,51 +37,12 @@ function Questions() {
   const [answer2, setAnser2] = useState("");
   const [attempted, setAttempted] = useState(false);
   const [countdown, setCountdown] = useState(10);
-  const [updateSuccess, setUpdateSccuess] = useState<Boolean[]>([]);
   const [question, setQuestion] = useState(cookies.current);
   const selectTeam = useAtomValue(selectedTeam);
-  console.log(updateSuccess);
 
   const handleChange = (event: SelectChangeEvent) => {
     setQuestion(event.target.value as string);
   };
-
-  useEffect(() => {
-    const allCookiesTrue = RobloxAnswer.map(
-      (el) => cookies[el.question] == true
-    ).every(Boolean);
-
-    if (allCookiesTrue) {
-      if (updateSuccess.length != cookies.select.length) {
-        cookies.select.map(async (el) => {
-          await server
-            .post("/operate/score/player", {
-              groupNo: el.number,
-              nickname: "Gim",
-              score: cookies.score,
-            })
-            .then((res) => {
-              if (res.status === 200) {
-                enqueueSnackbar(`Update score for ${el.name} successfully`, {
-                  variant: "success",
-                });
-                console.log("Update score successfully");
-                setUpdateSccuess((prev) => [...prev, true]);
-              }
-            })
-            .catch((error) => {
-              enqueueSnackbar(`Error updating score for ${el.name} `, {
-                variant: "error",
-              });
-              console.error("Error updating score:", error);
-            });
-        });
-      } else {
-        setCookie("success", updateSuccess);
-      }
-    }
-  }, [cookies]);
-  console.log(cookies.success);
 
   const handleUnlock = async () => {
     if (answer2 != "") {
@@ -92,6 +54,38 @@ function Questions() {
           title: "Answer Correct",
           icon: "success",
         });
+        // console.log(cookies);
+        let result = cookies;
+        result[question] = true;
+        console.log(result);
+        const allCookiesTrue = RobloxAnswer.map(
+          (el) => result[el.question] == true
+        ).every(Boolean);
+        if (allCookiesTrue) {
+          result.select.map(async (el: Group) => {
+            await server
+              .post("/operate/score/player", {
+                groupNo: el.number,
+                nickname: "Gim",
+                score: cookies.score,
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  enqueueSnackbar(`Update score for ${el.name} successfully`, {
+                    variant: "success",
+                  });
+                  console.log("Update score successfully");
+                }
+              })
+              .catch((error) => {
+                enqueueSnackbar(`Error updating score for ${el.name} `, {
+                  variant: "error",
+                });
+                console.error("Error updating score:", error);
+              });
+          });
+        }
+
         setCookie(question, true);
         setCookie("score", cookies.score + point);
         setAnswer1("");
