@@ -48,9 +48,8 @@ function Questions() {
     console.log(cookies.select);
     cookies.select.map(async (el: Group) => {
       await server
-        .post("/operate/score/player", {
+        .post("/operate/score/roblox", {
           groupNo: el.number,
-          nickname: "Pooh",
           score: cookies.score,
         })
         .then((res) => {
