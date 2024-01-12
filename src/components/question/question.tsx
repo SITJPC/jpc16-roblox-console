@@ -27,9 +27,7 @@ import { useSnackbar } from "notistack";
 import { Team } from "../../types/team";
 
 function Questions() {
-  const [cookies, setCookie] = useCookies(
-    RobloxAnswer.map((el) => el.question)
-  );
+  const [cookies, setCookie] = useCookies(RobloxAnswer.map((el) => el.room));
   const { enqueueSnackbar } = useSnackbar();
   const point = 100;
 
@@ -37,12 +35,12 @@ function Questions() {
   const [answer2, setAnser2] = useState("");
   const [attempted, setAttempted] = useState(false);
   const [countdown, setCountdown] = useState(10);
-  const [question, setQuestion] = useState(cookies.current);
+  const [room, setRoom] = useState(cookies.current);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const selectTeam = useAtomValue(selectedTeam);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setQuestion(event.target.value as string);
+    setRoom(event.target.value as string);
   };
 
   const handleSubmitScore = () => {
@@ -70,7 +68,7 @@ function Questions() {
     });
 
     RobloxAnswer.map((el) => {
-      setCookie(el.question, false);
+      setCookie(el.room, false);
     });
     setCookie("score", 0);
     enqueueSnackbar("reset score success!", {
@@ -84,14 +82,13 @@ function Questions() {
   const handleUnlock = async () => {
     if (answer2 != "") {
       if (
-        answer2 ==
-        RobloxAnswer.find((item) => item.question == question)?.secondAnswer
+        answer2 == RobloxAnswer.find((item) => item.room == room)?.mainAnswer
       ) {
         Swal.fire({
           title: "Answer Correct",
           icon: "success",
         });
-        setCookie(question, true);
+        setCookie(room, true);
         setCookie("score", cookies.score + point);
         setAnswer1("");
         setAnser2("");
@@ -106,7 +103,7 @@ function Questions() {
         title: "Input Roblox Answer",
         showCancelButton: true,
         input: "text",
-        inputLabel: "Your Answer",
+        inputLabel: `Room ${parseInt(room, 10) + 10}`,
         inputPlaceholder: "Enter your answer",
         inputValidator: (value) => {
           if (!value) {
@@ -119,8 +116,7 @@ function Questions() {
         },
       });
       if (
-        text ==
-        RobloxAnswer.find((item) => item.question == question)?.firstAnswer
+        text == RobloxAnswer.find((item) => item.room == room)?.unlockAnswer
       ) {
         console.log("correct!");
         Swal.fire({
@@ -164,20 +160,20 @@ function Questions() {
       setCookie("score", 0);
     }
     RobloxAnswer.map((el) => {
-      if (cookies[el.question] == undefined) {
-        setCookie(el.question, false);
+      if (cookies[el.room] == undefined) {
+        setCookie(el.room, false);
       }
     });
-  }, []);
+  }, [cookies, setCookie]);
 
   useEffect(() => {
-    setCookie("current", question);
+    setCookie("current", room);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let intervalId:any;
+    let intervalId: any;
 
     if (
       answer1 !==
-        RobloxAnswer.find((item) => item.question == question)?.firstAnswer &&
+        RobloxAnswer.find((item) => item.room == room)?.unlockAnswer &&
       attempted &&
       countdown > 0
     ) {
@@ -193,7 +189,7 @@ function Questions() {
     return () => {
       clearInterval(intervalId);
     };
-  }, [answer1, attempted, countdown, question]);
+  }, [answer1, attempted, countdown, room, setCookie]);
 
   return (
     <Box width={"100vw"} height={"100vh"}>
@@ -260,22 +256,20 @@ function Questions() {
               marginBottom={"1rem"}
               color={"black"}
             >
-              {`Question ${question}`}
+              {`Room ${room}`}
             </Typography>
             <Box sx={{ minWidth: 120, marginLeft: "1.5rem" }}>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Question</InputLabel>
+                <InputLabel id="demo-simple-select-label">Room</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={question}
-                  label="Question"
+                  value={room}
+                  label="Room"
                   onChange={handleChange}
                 >
                   {RobloxAnswer.map((el) => (
-                    <MenuItem value={el.question}>
-                      Question {el.question}
-                    </MenuItem>
+                    <MenuItem value={el.room}>Room {el.room}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -288,8 +282,8 @@ function Questions() {
               label="answer"
               disabled={
                 answer1 !=
-                  RobloxAnswer.find((item) => item.question == question)
-                    ?.firstAnswer || cookies[question]
+                  RobloxAnswer.find((item) => item.room == room)
+                    ?.unlockAnswer || cookies[room]
               }
               onChange={(el) => {
                 setAnser2(el.target.value);
@@ -299,17 +293,16 @@ function Questions() {
               disabled={
                 (attempted &&
                   (answer1 !==
-                    RobloxAnswer.find((item) => item.question == question)
-                      ?.firstAnswer ||
+                    RobloxAnswer.find((item) => item.room == room)
+                      ?.unlockAnswer ||
                     countdown != 0) &&
                   answer2 == "") ||
-                cookies[question]
+                cookies[room]
               }
               variant="contained"
               startIcon={
                 answer1 ==
-                RobloxAnswer.find((item) => item.question == question)
-                  ?.firstAnswer ? (
+                RobloxAnswer.find((item) => item.room == room)?.unlockAnswer ? (
                   <LockOpenIcon />
                 ) : (
                   <LockIcon />
@@ -319,8 +312,7 @@ function Questions() {
                 paddingX: "3rem",
                 backgroundColor:
                   answer1 ==
-                  RobloxAnswer.find((item) => item.question == question)
-                    ?.firstAnswer
+                  RobloxAnswer.find((item) => item.room == room)?.unlockAnswer
                     ? "green"
                     : "blue",
               }}
@@ -328,15 +320,14 @@ function Questions() {
             >
               {answer1 !== ""
                 ? answer1 ==
-                  RobloxAnswer.find((item) => item.question == question)
-                    ?.firstAnswer
+                  RobloxAnswer.find((item) => item.room == room)?.unlockAnswer
                   ? "Submit"
                   : attempted
                   ? `${countdown}s`
                   : "Unlock"
                 : "Unlock"}
             </Button>
-            {cookies[question] ? (
+            {cookies[room] ? (
               <CheckCircleIcon sx={{ color: "green", fontSize: "3rem" }} />
             ) : (
               ""

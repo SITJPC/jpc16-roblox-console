@@ -1,27 +1,54 @@
+import { Answer } from "../types/answer";
+
 export const RobloxAnswer: Answer[] = [
   {
-    question: "1",
-    firstAnswer: "ddd",
-    secondAnswer: "bbb",
+    room: "1",
+    mainAnswer: "website",
+    unlockAnswer: "Steganography",
   },
   {
-    question: "2",
-    firstAnswer: "eee",
-    secondAnswer: "bbb",
+    room: "2",
+    mainAnswer: "110111100",
+    unlockAnswer: "Binary Finding",
   },
   {
-    question: "3",
-    firstAnswer: "drrrdd",
-    secondAnswer: "bbb",
+    room: "3",
+    mainAnswer: "camphub",
+    unlockAnswer: "error",
   },
   {
-    question: "4",
-    firstAnswer: "ggg",
-    secondAnswer: "bbb",
+    room: "4",
+    mainAnswer: "Javascript",
+    unlockAnswer: "Steganography",
   },
   {
-    question: "5",
-    firstAnswer: "ddqqqd",
-    secondAnswer: "bbb",
+    room: "5",
+    mainAnswer: "JSON Extractor,Morse Code,Binary Finding",
+    unlockAnswer: "Steganography",
+  },
+  {
+    room: "6",
+    mainAnswer: "1010",
+    unlockAnswer: "Steganography",
+  },
+  {
+    room: "7",
+    mainAnswer: "error",
+    unlockAnswer: "Steganography",
+  },
+  {
+    room: "8",
+    mainAnswer: "SIT",
+    unlockAnswer: "Steganography",
+  },
+  {
+    room: "9",
+    mainAnswer: "error",
+    unlockAnswer: "Steganography",
+  },
+  {
+    room: "10",
+    mainAnswer: "341",
+    unlockAnswer: "Steganography",
   },
 ];
