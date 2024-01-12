@@ -9,33 +9,33 @@ import {
   CardActionArea,
   CardMedia,
   Grid,
-  Button,
 } from "@mui/material";
 import server from "../../utils/server";
-import { Group, GroupPlayerResponse } from "../../types/team";
 import { atom, useAtom } from "jotai";
 import Swal from "sweetalert2";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-export const selectedTeam = atom<Group[]>([]);
+import { Team, TeamPlayerResponse } from "../../types/team";
+export const selectedTeam = atom<Team[]>([]);
 
 const SelectTeam = () => {
-  const [groupPlayer, setGroupPlayer] = useState<Group[]>([]);
+  const [teamPlayer, setTeamPlayer] = useState<Team[]>([]);
   const [team, setTeam] = useAtom(selectedTeam);
   const [error, setError] = useState("");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie] = useCookies(["select", "current"]);
   const navigate = useNavigate();
 
   const getGroupPlayer = async () => {
-    await server.get<GroupPlayerResponse>("/operate/player").then((res) => {
+    await server.get<TeamPlayerResponse>("/operate/player").then((res) => {
       if (res.data.success) {
-        setGroupPlayer(res.data.data);
+        setTeamPlayer(res.data.data);
       }
     });
   };
 
-  const handleClickCard = (data: Group) => {
+  const handleClickCard = (data: Team) => {
     setTeam((prevTeam) =>
       prevTeam.includes(data)
         ? prevTeam.filter((member) => member !== data)
@@ -136,12 +136,12 @@ const SelectTeam = () => {
           </Typography>
           <Box
             sx={{
-              overflowY: groupPlayer.length > 6 ? "auto" : "hidden",
-              maxHeight: groupPlayer.length > 6 ? "80vh" : "inherit",
+              overflowY: teamPlayer.length > 6 ? "auto" : "hidden",
+              maxHeight: teamPlayer.length > 6 ? "80vh" : "inherit",
             }}
           >
             <Grid container justifyContent="center" spacing={2}>
-              {groupPlayer?.map((value) => (
+              {teamPlayer?.map((value) => (
                 <Grid key={value.number} item>
                   <Card
                     sx={{

@@ -24,7 +24,7 @@ import { useAtomValue } from "jotai";
 import { selectedTeam } from "../selectTeam/select_team";
 import server from "../../utils/server";
 import { useSnackbar } from "notistack";
-import { Group } from "../../types/team";
+import { Team } from "../../types/team";
 
 function Questions() {
   const [cookies, setCookie] = useCookies(
@@ -38,6 +38,7 @@ function Questions() {
   const [attempted, setAttempted] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [question, setQuestion] = useState(cookies.current);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const selectTeam = useAtomValue(selectedTeam);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -46,10 +47,10 @@ function Questions() {
 
   const handleSubmitScore = () => {
     console.log(cookies.select);
-    cookies.select.map(async (el: Group) => {
+    cookies.select.map(async (el: Team) => {
       await server
         .post("/operate/score/roblox", {
-          groupNo: el.number,
+          teamNo: el.number,
           score: cookies.score,
         })
         .then((res) => {
@@ -171,7 +172,8 @@ function Questions() {
 
   useEffect(() => {
     setCookie("current", question);
-    let intervalId: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let intervalId:any;
 
     if (
       answer1 !==
@@ -227,7 +229,7 @@ function Questions() {
             </Typography>
           </Box>
         </Stack>
-        {cookies.select?.map((el: Group) => {
+        {cookies.select?.map((el: Team) => {
           return (
             <Stack
               direction={"row"}

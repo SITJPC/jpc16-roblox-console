@@ -1,16 +1,19 @@
-export interface GroupPlayerResponse {
+export interface TeamPlayerResponse {
   success: boolean;
-  data: Group[];
+  data: Team[];
 }
 
-export interface Group {
-  groupId: string;
+export interface Team {
+  teamId: string;
   name: string;
   number: number;
-  players: Player[];
+  players: Player[] | null;
 }
 
 export interface Player {
   id: string;
   name: string;
+  fullname: string | null;
+  groupName: string | null;
 }
+
