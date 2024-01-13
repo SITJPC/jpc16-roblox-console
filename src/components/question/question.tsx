@@ -29,7 +29,7 @@ import { Team } from "../../types/team";
 function Questions() {
   const [cookies, setCookie] = useCookies(RobloxAnswer.map((el) => el.room));
   const { enqueueSnackbar } = useSnackbar();
-  const point = 100;
+  const point = 1000;
 
   const [answer1, setAnswer1] = useState("");
   const [answer2, setAnser2] = useState("");

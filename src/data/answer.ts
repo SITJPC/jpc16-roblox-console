@@ -9,46 +9,46 @@ export const RobloxAnswer: Answer[] = [
   {
     room: "2",
     mainAnswer: "110111100",
-    unlockAnswer: "Binary Finding",
+    unlockAnswer: "me",
   },
   {
     room: "3",
     mainAnswer: "camphub",
-    unlockAnswer: "error",
+    unlockAnswer: "Binary Finding",
   },
   {
     room: "4",
     mainAnswer: "Javascript",
-    unlockAnswer: "Steganography",
+    unlockAnswer: "Blow My Mind",
   },
   {
     room: "5",
-    mainAnswer: "JSON Extractor,Morse Code,Binary Finding",
-    unlockAnswer: "Steganography",
+    mainAnswer: '"JSON Extractor","Morse Code","Binary Finding"',
+    unlockAnswer: "error",
   },
   {
     room: "6",
     mainAnswer: "1010",
-    unlockAnswer: "Steganography",
+    unlockAnswer: "Yes",
   },
   {
     room: "7",
     mainAnswer: "error",
-    unlockAnswer: "Steganography",
+    unlockAnswer: "0",
   },
   {
     room: "8",
     mainAnswer: "SIT",
-    unlockAnswer: "Steganography",
+    unlockAnswer: "Yes",
   },
   {
     room: "9",
     mainAnswer: "error",
-    unlockAnswer: "Steganography",
+    unlockAnswer: "21",
   },
   {
     room: "10",
     mainAnswer: "341",
-    unlockAnswer: "Steganography",
+    unlockAnswer: "yellow",
   },
 ];
